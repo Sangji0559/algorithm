@@ -12,16 +12,18 @@ def calculate_volume(matrix):
     return volume
 
 def find_max_volume(data):
-    sample = data.sample(frac=0.3)
-    volume = calculate_volume(sample)
-    return volume
+    max_volume = 0
+    for _ in range(100):
+        sample = data.sample(frac=0.3)
+        volume = calculate_volume(sample)
+        if(max_volume<volume):
+            max_volume = volume
+    
+    return max_volume
+    
 
 start_time = time.time()
-for _ in range(100):
-    max_volume=0
-    fvolume = find_max_volume(dft)
-    if(max_volume<fvolume):
-        max_volume=fvolume
+max_volume = find_max_volume(dft)
 end_time = time.time()
 
 print("단위 벡터 결과:")
