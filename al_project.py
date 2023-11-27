@@ -20,7 +20,6 @@ def find_max_volume(data):
             max_volume = volume
     
     return max_volume
-    
 
 start_time = time.time()
 max_volume = find_max_volume(dft)
