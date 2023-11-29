@@ -7,19 +7,19 @@ dft = df.T
 
 def calculate_volume(matrix):
     # 행렬의 부피 계산
-    det = np.linalg.det(matrix.T @ matrix)
-    volume =np.sqrt(abs(det))
+    det = np.linalg.det(matrix @ matrix.T)
+    volume = np.sqrt(abs(det))
     return volume
 
 def find_max_volume(data):
-    max_volume = 0
-    for _ in range(2):
-        sample = data.sample(frac=0.5, replace=False)
-        print(sample)
+    max_volume = 
+    for _ in range(2000): 
+        sample = data.sample(n=20, replace = False)
+
         volume = calculate_volume(sample)
         if(max_volume<volume):
             max_volume = volume
-    
+
     return max_volume
 
 start_time = time.time()
