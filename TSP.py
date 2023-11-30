@@ -106,4 +106,4 @@ for i in tsp_path:
         tsp.append('G')
     if i == 7:
         tsp.append('H')
-print("TSP 경로 from MST:", tsp)
+print("TSP 경로 :", tsp)
