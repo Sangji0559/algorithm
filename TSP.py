@@ -31,7 +31,7 @@ def kruskal(points):
         for j in range(i + 1, len(points)):
             x1, y1 = points[i]
             x2, y2 = points[j]
-            distance = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+            distance = ((x1 - x2) ** 2 + (y1 - y2) ** 2)
             edges.append((i, j, distance))
 
     # 거리를 기준으로 간선 정렬
@@ -86,6 +86,7 @@ def tsp_from_mst(mst_edges, start):
     return unique_tsp_path
 
 mst = kruskal(coordinates)
+print(mst)
 tsp_path = tsp_from_mst(mst, 0)
 tsp=[]
 for i in tsp_path:

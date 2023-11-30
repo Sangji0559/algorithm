@@ -12,7 +12,7 @@ def calculate_volume(matrix):
     return volume
 
 def find_max_volume(data):
-    max_volume = 
+    max_volume = 0
     for _ in range(2000): 
         sample = data.sample(n=20, replace = False)
 
