@@ -87,4 +87,22 @@ def tsp_from_mst(mst_edges, start):
 
 mst = kruskal(coordinates)
 tsp_path = tsp_from_mst(mst, 0)
-print("TSP 경로 from MST:", tsp_path)
+tsp=[]
+for i in tsp_path:
+    if i == 0:
+        tsp.append('A')
+    if i == 1:
+        tsp.append('B')
+    if i == 2:
+        tsp.append('C')
+    if i == 3:
+        tsp.append('D')
+    if i == 4:
+        tsp.append('E')
+    if i == 5:
+        tsp.append('F')
+    if i == 6:
+        tsp.append('G')
+    if i == 7:
+        tsp.append('H')
+print("TSP 경로 from MST:", tsp)
