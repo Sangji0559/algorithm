@@ -91,8 +91,5 @@ def tsp(graph, start_node):
             tsp_path.append('H')
     return tsp_path
 
-mst = PrimMST(0)
-print(mst)
-print(mst_to_graph(mst))
-print(dfs(mst_to_graph(mst),0))
-print(tsp(mst_to_graph(mst),0))
+mst_g = mst_to_graph(PrimMST(0))
+print(tsp(mst_g,0))
