@@ -59,8 +59,6 @@ def tsp_from_mst(mst_edges, start):
 
     return unique_tsp_path
 
-
-
 prim_mst = prim(coordinates)
 
 tsp_path_prim = tsp_from_mst(prim_mst, 0)
