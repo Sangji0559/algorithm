@@ -67,11 +67,24 @@ def dfs(graph, start_node, visited=None):
 
     return visit
 
-def tsp(graph, start_node):
+def calculate_tsp_distance(graph, tsp_path, coordinates):
+    total_distance = 0
+    for i in range(len(tsp_path) - 1):
+        start_node = tsp_path[i]
+        end_node = tsp_path[i + 1]
+        x1, y1 = coordinates[start_node]
+        x2, y2 = coordinates[end_node]
+        distance = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+        total_distance += distance
+    return total_distance
+
+
+def tsp(graph, start_node, coordinates):
     circuit = dfs(graph, start_node)
     unique_circuit = list(dict.fromkeys(circuit))  # 중복 제거
     unique_circuit += [unique_circuit[0]]
     tsp_path = []
+    tsp_distance = calculate_tsp_distance(graph, unique_circuit, coordinates)
     for i in unique_circuit:
         if i == 0:
             tsp_path.append('A')
@@ -89,7 +102,9 @@ def tsp(graph, start_node):
             tsp_path.append('G')
         elif i == 7:
             tsp_path.append('H')
-    return tsp_path
+    return tsp_path, tsp_distance
 
 mst_g = mst_to_graph(PrimMST(0))
-print(tsp(mst_g,0))
+tsp_path, tsp_distance = tsp(mst_g,0,coordinates)
+print(tsp_path)
+print(tsp_distance)
