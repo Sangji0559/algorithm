@@ -5,7 +5,6 @@ import numpy as np
 df = pd.read_csv('input.csv')
 dft = df.T
 
-
 def calculate_volume(matrix):
     # 행렬의 부피 계산
     det = np.linalg.det(matrix @ matrix.T)
@@ -22,7 +21,6 @@ def top_sample(matrix):
 
 def find_max_volume(data):
     max_volume = 0
-    max_sums = 0
     for _ in range(1000): 
         sample = data.sample(n=20, replace = False)
         volume = calculate_volume(sample)
@@ -30,14 +28,13 @@ def find_max_volume(data):
             max_volume = volume
             #print(sample)
             
-
-            
     return max_volume
 
 start_time = time.time()
-#max_volume = find_max_volume(dft)
-print(top_sample(df))
+max_volume = find_max_volume(dft)
 end_time = time.time()
 
-#print("결과: ", max_volume)
+print("결과: ", max_volume)
 print("소요 시간:", end_time - start_time, "초")
+print(top_sample(df))
+
