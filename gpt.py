@@ -22,7 +22,7 @@ def sample_matrix(): # 20*20 행렬 만들기
 
 start_time = time.time()
 data, index = sample_matrix()
-print("sample_matrix 결과 : ", calculate_volume(data))
-print("matrix index : ", list(index))
+print("max_volume : ", calculate_volume(data))
+print("matrixindex : ", list(index))
 end_time = time.time()
 print("소요 시간:", end_time - start_time, "초")
