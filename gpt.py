@@ -7,8 +7,11 @@ def calcVolume(mat):
 def maximize_volume(matrix, k):
     U, S, Vt = np.linalg.svd(matrix, full_matrices=False)
 
+    # 대각 행렬 직접 생성
+    diag_S = np.diag(S[:k])
+
     # make approx matrix
-    approx_matrix = np.dot(U[:, :k], np.dot(np.diag(S[:k]), Vt[:k, :]))
+    approx_matrix = np.dot(U[:, :k], np.dot(diag_S, Vt[:k, :]))
 
     volume = calcVolume(approx_matrix)
 
@@ -22,12 +25,10 @@ matrix = inp.values  # DataFrame을 NumPy 배열로 변환
 best_k = 0
 max_volume = 0
 
-for k in range(1, 21):
-    current_volume = maximize_volume(matrix[:, :100], k)
+num_columns_to_use = 300  # 사용할 열 수 조정
+current_volume = maximize_volume(matrix[:, :num_columns_to_use], 20)
 
-    if current_volume > max_volume:
-        max_volume = current_volume
-        best_k = k
+if current_volume > max_volume:
+    max_volume = current_volume
 
 print("최대 부피:", max_volume)
-print("최적의 k:", best_k)
