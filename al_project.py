@@ -2,22 +2,22 @@ import time
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('input.csv')
-dft = df.T
+df = pd.read_csv('input.csv') # 20*10000
+dft = df.T # 10000*20
 
 def calculate_volume(matrix):
     # 행렬의 부피 계산
-    det = np.linalg.det(matrix @ matrix.T)
+    det = np.linalg.det(matrix @ matrix.T) #20*20
     volume = np.sqrt(abs(det))
     return volume
 
-def top_sample(matrix):
-    v_list=[]
-    for col_idx, col in enumerate(matrix.columns):
-        vector_size = np.linalg.norm(np.array(matrix[col]))
-        v_list.append((vector_size,col_idx))
-        v_list.sort(reverse=True)
-    return (v_list[0:20])
+def sample_matrix(): # 20*20 행렬 만들기
+    sampled_row = list(np.argmax(df, axis=1))
+    print(sampled_row)
+    sampled_column = df.columns[sampled_row]
+    sampled_data = df[sampled_column]
+    print(sampled_data)
+    return sampled_data
 
 def find_max_volume(data):
     max_volume = 0
@@ -31,10 +31,10 @@ def find_max_volume(data):
     return max_volume
 
 start_time = time.time()
+print(calculate_volume(sample_matrix()))
 max_volume = find_max_volume(dft)
 end_time = time.time()
 
-print("결과: ", max_volume)
+print(max_volume)
 print("소요 시간:", end_time - start_time, "초")
-print(top_sample(df))
 
