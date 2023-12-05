@@ -2,27 +2,41 @@ import time
 import pandas as pd
 import numpy as np
 
-df = pd.read_csv('input.csv') 
-dfv = df.values 
+df = pd.read_csv('input.csv')  # 20*10000
 
 def calculate_volume(matrix):
     # 행렬의 부피 계산
-    return np.sqrt(abs(np.linalg.det(matrix @ matrix.T)))
-
-def find_max_volume(matrix, k):
-    U, S, Vt = np.linalg.svd(matrix, full_matrices=False)
-    approx_matrix = np.dot(U[:,:k],np.dot(np.diag(S[:k]),Vt[:k,:]))
-    volume = calculate_volume(approx_matrix)
-
+    det = np.linalg.det(matrix.T @ matrix)
+    volume = np.sqrt(abs(det))
     return volume
-max_volume = 0
+
+def sample_matrix_custom():
+    # 예제: 각 열의 노름이 큰 순서대로 20개의 행 선택
+    sorted_cols = np.argsort(np.linalg.norm(df, axis=0))
+
+    # 행렬의 열벡터 크기를 기준으로 정렬하고, 그에 해당하는 행들을 추출
+    sorted_data = df.iloc[:, sorted_cols[-20:]]
+    max_volume = calculate_volume(sorted_data)
+    list_col = list(sorted_cols[-20:])  # 초기값 설정
+
+    for i in range(20):
+        for j in range(80):
+            sorted_data_copy = sorted_data.copy()  # 복사본을 사용하여 기존 데이터를 변경하지 않도록 함
+            sorted_data_copy.drop(columns=sorted_data_copy.columns[i], inplace=True)
+            new_column_data = df.iloc[:, sorted_cols[- j]]
+            sorted_data_copy[f'{sorted_cols[-j]}'] = new_column_data
+            current_volume = calculate_volume(sorted_data_copy)
+            if current_volume > max_volume:
+                max_volume = current_volume
+                list_col = list(sorted_data_copy.columns)
+                sorted_data = sorted_data_copy  # Update sorted_data with the better matrix
+
+    return max_volume, list_col
 
 start_time = time.time()
-cur_volume = find_max_volume(dfv[:,:10000],20)
-if cur_volume > max_volume:
-    max_volume = cur_volume
+max_v, index = sample_matrix_custom()
+print("matrix volume: ", max_v)
+print("matrix index : ", index)
 end_time = time.time()
 
-print(max_volume)
 print("소요 시간:", end_time - start_time, "초")
-

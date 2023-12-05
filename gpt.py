@@ -21,14 +21,14 @@ def sample_matrix_custom():
     list_col = list(sorted_cols[-20:])  # 초기값 설정
 
     for i in range(20):
-        for j in range(1000):
+        for j in range(80):
             sorted_data_copy = sorted_data.copy()  # 복사본을 사용하여 기존 데이터를 변경하지 않도록 함
             sorted_data_copy = sorted_data_copy.drop(columns=sorted_data_copy.columns[i])
-            new_column_data = df.iloc[:, sorted_cols[-20 - j]]
-            sorted_data_copy[f'{sorted_cols[-20-j]}'] = new_column_data
+            new_column_data = df.iloc[:, sorted_cols[- j]]
+            sorted_data_copy[f'{sorted_cols[-j]}'] = new_column_data
             current_volume = calculate_volume(sorted_data_copy)
             if current_volume > max_volume:
-                print(j, sorted_cols[-20-j])
+                print(i,j, sorted_cols[-j])
                 max_volume = current_volume
                 list_col = list(sorted_data_copy.columns)
                 sorted_data = sorted_data_copy  # Update sorted_data with the better matrix
