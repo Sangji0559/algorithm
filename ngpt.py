@@ -18,7 +18,7 @@ def sample_matrix_custom():
     # 행렬의 열벡터 크기를 기준으로 정렬하고, 그에 해당하는 행들을 추출
     sorted_data = df.iloc[:, sorted_cols[-20:]]
     max_volume = calculate_volume(sorted_data)
-    list_col = list(sorted_cols[-40:])  # 초기값 설정
+    list_col = list(sorted_cols[-20:])  # 초기값 설정
 
     for i in range(20):
         for j in range(1000):
