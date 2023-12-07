@@ -1,44 +1,65 @@
-import time
-import pandas as pd
 import numpy as np
-
-df = pd.read_csv('input.csv')  # 20*10000
-dft = df.T  # 10000*20
+import pandas as pd
+import time
 
 def calculate_volume(matrix):
-    # 행렬의 부피 계산
-    det = np.linalg.det(matrix.T @ matrix)
-    volume = np.sqrt(abs(det))
-    return volume
+    return np.sqrt(np.abs(np.linalg.det(np.dot(matrix.T, matrix))))
 
-def sample_matrix_custom():
-    # 예제: 각 열의 노름이 큰 순서대로 20개의 행 선택
-    sorted_cols = np.argsort(np.linalg.norm(df, axis=0))
+def find_max_volume(matrix,j):
+    included_indices = []
+    result_matrix = []
+    result_indices = []
+    
+    sorted_cols = np.argsort(np.linalg.norm(matrix, axis=0))[-20:]
 
-    # 행렬의 열벡터 크기를 기준으로 정렬하고, 그에 해당하는 행들을 추출
-    sorted_data = df.iloc[:, sorted_cols[-20:]]
-    max_volume = calculate_volume(sorted_data)
-    list_col = list(sorted_cols[-20:])  # 초기값 설정
+    for k in range(20):
+        max_subset = []
+        max_volume = 0
+        max_index = 0
 
+        for i in range(matrix.shape[1]):
+            if i in included_indices:
+                continue
+
+            subset = np.hstack((matrix[:, i:i+1], result_matrix)) if k > 0 else matrix[:, i:i+1]
+            volume = calculate_volume(subset)
+
+            if max_volume < volume:
+                max_volume = volume
+                max_subset = matrix[:, i:i+1]
+                max_index = i
+
+        if k == 0:
+            # sorted_cols의 첫 번째 열을 선택
+            print(np.max(matrix[:,sorted_cols[j]:sorted_cols[j]+1]))
+            result_matrix = matrix[:, sorted_cols[j]:sorted_cols[j]+1]
+            result_indices.append(sorted_cols[j])
+        else:
+            result_matrix = np.hstack((max_subset, result_matrix)) if k == 1 else np.hstack((result_matrix, max_subset))
+            result_indices.append(max_index)
+        included_indices.append(max_index)
+
+    return result_matrix, result_indices
+
+if __name__ == "__main__":
+    input_data = pd.read_csv('input.csv')
+    input_matrix = input_data.values
+    #start_time = time.time()
+    max_v = 0
+    max_i = 0
     for i in range(20):
-        for j in range(1000):
-            sorted_data_copy = sorted_data.copy()  # 복사본을 사용하여 기존 데이터를 변경하지 않도록 함
-            sorted_data_copy = sorted_data_copy.drop(columns=sorted_data_copy.columns[i])
-            new_column_data = df.iloc[:, sorted_cols[-20 - j]]
-            sorted_data_copy[f'{sorted_cols[-20-j]}'] = new_column_data
-            current_volume = calculate_volume(sorted_data_copy)
-            if current_volume > max_volume:
-                print(j, sorted_cols[-20-j])
-                max_volume = current_volume
-                list_col = list(sorted_data_copy.columns)
+        best_matrix, best_index = find_max_volume(input_matrix,i)
+        best_volume = calculate_volume(best_matrix)
+        if max_v < best_volume:
+            max_idx = best_index
+            max_v = best_volume
+        print("선택된 인덱스:", best_index)
+        print("최고 부피:", best_volume)
+    #end_time = time.time()
+    print(max_idx[0])
+    print(max_v)
+    print(max_idx)
+    #elapsed_time = end_time - start_time
+    #print(f"경과 시간: {elapsed_time} 초")
 
-    return max_volume, list_col
 
-
-start_time = time.time()
-max_v , index = sample_matrix_custom()
-print("matrix volume: ", max_v)
-print("matrix index : ", index)
-end_time = time.time()
-
-print("소요 시간:", end_time - start_time, "초")

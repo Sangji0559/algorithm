@@ -1,54 +1,39 @@
 import pandas as pd
 import numpy as np
-from scipy.optimize import minimize
+import time
 
 def calculate_volume(matrix):
-    if matrix.ndim == 1:
-        matrix = matrix.reshape(1, -1)
-    
-    det = np.linalg.det(matrix.T @ matrix)
-    volume = np.sqrt(abs(det))
-    return volume
+    return np.sqrt(abs(np.linalg.det(matrix.T @ matrix)))
 
-def constraint(matrix):
-    if matrix.ndim == 1:
-        matrix = matrix.reshape(1, -1)
-    return np.sum(matrix, axis=1) - 1.0
+def find_max_volume():
+    vectors = []
+    idx = []
+    for i in range(20):
+        max_volume = 0
+        max_idx = 0
+        for j in range(data.shape[1]):
+            subset = vectors[:]
+            if i == 0:
+                subset = data[:, j:j+1]
+            else:
+                subset = np.hstack((data[:, j:j+1], vectors))
 
-def print_values(matrix):
-    print("Objective Function Value:", calculate_volume(matrix))
-    print("Constraint Value:", constraint(matrix))
+            candidate_volume = calculate_volume(subset)
+            if max_volume < candidate_volume:
+                max_volume = candidate_volume
+                vectors = subset  # Fix: Update vectors with the correct subset
+                max_idx = j  # Fix: Update max_idx with the correct index
+        idx.append(max_idx)  # Fix: Store the index in the idx list
+    return vectors, idx
 
-# 데이터 불러오기
-df = pd.read_csv('input.csv')  # 20*10000
+df = pd.read_csv('input.csv')
+data = df.values
 
-# 예제: 각 열의 노름이 큰 순서대로 20개의 행 선택
-sorted_cols = np.argsort(np.linalg.norm(df, axis=0))
+start = time.time()
+best_matrix, best_index = find_max_volume()
+best_volume = calculate_volume(best_matrix)
+end = time.time()
 
-# 행렬의 열벡터 크기를 기준으로 정렬하고, 그에 해당하는 행들을 추출
-initial_matrix = df.iloc[:, sorted_cols[-20:]]
-
-# 초기 추정값 (2차원 행렬로 변환)
-x0 = initial_matrix.to_numpy().flatten()
-
-# 최적화 문제 정의
-constraints = ({'type': 'eq', 'fun': constraint})
-
-# 최적화 알고리즘 변경 ('Powell' 사용)
-result = minimize(calculate_volume, x0, constraints=constraints, method='Powell', options={'disp': True})
-
-# 최적화 결과 출력
-max_volume = result.fun
-optimized_matrix = result.x.reshape(initial_matrix.shape)
-
-# 출력
-print("====== 최적화 결과 ======")
-print("Optimization Exit Code:", result.message)
-print("Optimal Matrix:")
-print(optimized_matrix)
-print("Max Volume:", max_volume)
-
-# 디버깅을 위한 추가 정보 출력
-print("\n====== 디버깅 정보 ======")
-print_values(optimized_matrix)
-print("Condition number of the matrix:", np.linalg.cond(optimized_matrix))
+print(best_volume)
+print(best_index)
+print(end - start)
