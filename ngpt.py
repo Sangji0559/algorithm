@@ -31,7 +31,6 @@ def find_max_volume(matrix,j):
 
         if k == 0:
             # sorted_cols의 첫 번째 열을 선택
-            print(np.max(matrix[:,sorted_cols[j]:sorted_cols[j]+1]))
             result_matrix = matrix[:, sorted_cols[j]:sorted_cols[j]+1]
             result_indices.append(sorted_cols[j])
         else:
