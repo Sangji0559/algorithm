@@ -1,45 +1,58 @@
 import numpy as np
 import pandas as pd
+import random
 import time
 
-def calculate_volume(matrix):
-    return np.sqrt(np.abs(np.linalg.det(np.dot(matrix.T, matrix))))
+def calcVolume(mat):
+    return np.sqrt(np.abs(np.linalg.det(np.dot(mat.T, mat))))
 
-def find_max_volume_greedy(matrix):
-    included_indices = []
-    result_matrix = np.zeros((matrix.shape[0], 0))
+def sortMatrixByVolume(matrix):
+    volumes = [calcVolume(matrix[:, i:i+1]) for i in range(matrix.shape[1])]
+    sorted_indices = np.argsort(volumes)[::-1]
+    sorted_matrix = matrix[:, sorted_indices]
+    return sorted_indices
 
-    for _ in range(20):
+def findMaxVolume(init, matrix):
+    includeIndex = [init]
+    max_matrix = matrix[:, init:init+1]
+    for k in range(19):
         max_volume = 0
-        max_index = 0
-
+        maxIndex = 0
         for i in range(matrix.shape[1]):
-            if i in included_indices:
+            subset = max_matrix[:]
+            if i in includeIndex:
                 continue
 
-            volume = calculate_volume(
-                np.hstack((result_matrix, matrix[:, i:i+1]))
-            )
+            #subset = np.hstack((max_matrix, matrix[:, i:i+1]))
+            subset = np.hstack((matrix[:, i:i+1], max_matrix))
 
-            if volume > max_volume:
+            volume = calcVolume(subset)
+            if max_volume < volume:
                 max_volume = volume
-                max_index = i
+                max_subset = matrix[:, i:i+1]
+                maxIndex = i
 
-        included_indices.append(max_index)
-        result_matrix = np.hstack((result_matrix, matrix[:, max_index:max_index+1]))
+        #max_matrix = np.hstack((max_matrix, max_subset))
+        max_matrix = np.hstack((max_subset, max_matrix))
 
-    return result_matrix, included_indices
+        includeIndex.append(maxIndex)
 
-if __name__ == "__main__":
-    input_data = pd.read_csv('input.csv')
-    input_matrix = input_data.values
+    print(max_matrix)
 
-    start_time = time.time()
-    best_matrix, best_index = find_max_volume_greedy(input_matrix)
-    best_volume = calculate_volume(best_matrix)
-    end_time = time.time()
+    return max_matrix, includeIndex
 
-    elapsed_time = end_time - start_time
-    print("선택된 인덱스:", best_index)
-    print("최고 부피:", best_volume)
-    print(f"경과 시간: {elapsed_time} 초")
+idx = 25
+
+inp = pd.read_csv('input.csv')
+matrix = inp.values
+
+init_index = sortMatrixByVolume(matrix)
+
+start = time.time()
+best_matrix, best_index = findMaxVolume(init_index[idx], matrix)
+best_volume = calcVolume(best_matrix)
+end = time.time()
+sec = end - start
+print(best_index)
+print(best_volume)
+print(f"{sec}m/s")
