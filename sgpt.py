@@ -11,7 +11,7 @@ def find_max_volume(matrix):
     second_max_matrix = []
     result_indices = []
     second_max_indices = []
-
+  
     for k in range(20):
         max_subset = []
         second_max_subset = []
