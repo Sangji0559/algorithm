@@ -1,13 +1,35 @@
-# algorithm
+# Algorithm Assignment Repository
 
-2023년 2학기 
+## Introduction
 
-과목 : 알고리즘
+This repository is a collection of assignments and practice problems related to various algorithms and data structures. It serves as a learning resource to enhance programming skills and deepen the understanding of algorithmic concepts.
 
-과제 소스코드 저장 및 기록
+## Contents
 
----------------------------------------------------------
+- **Algorithm Problems**: Includes problems of varying difficulty levels covering a range of algorithms.
+- **Data Structure Exercises**: Contains practice problems focusing on fundamental data structures.
+- **Solved Solutions**: Each problem comes with a solved solution and explanations.
 
+## How to Contribute
+
+1. Fork this repository.
+2. Write solutions to the problems.
+3. Submit your solutions through a Pull Request.
+
+## Guidelines
+
+- Each directory contains problem descriptions and constraints.
+- Include comments in your code to enhance the understanding of your solution.
+- Review and provide feedback on solutions submitted by other contributors.
+
+## Contribution
+
+Contributions are always welcome! Any form of participation adds value. Whether it's bug reports, adding new problems, improving documentation, or code reviews—any contribution is appreciated.
+
+We hope this repository helps you deepen your understanding of algorithms and data structures while improving your programming skills. Looking forward to growing together as a community!
+
+
+-----------------------------------------------
 
 quicksort.py -> quicksort 구현하기
 
